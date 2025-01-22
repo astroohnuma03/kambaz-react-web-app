@@ -286,9 +286,15 @@ export default function Lab1() {
           <input type="date"
                  value="2000-01-21"
                  id="wd-text-fields-dob"/><br/>
-          
-          
         </form>
       </div>
+
+      <h4>Anchor tag</h4>
+      Please
+      <a href="https://www.lipsum.com" id="wd-lipsum">click here</a>
+      to get dummy text<br/>
+      Please
+      <a href="https://github.com/astroohnuma03/kambaz-react-web-app" id="wd-github">click here</a>
+      to view my github repository<br/>
     </div>
 );}
