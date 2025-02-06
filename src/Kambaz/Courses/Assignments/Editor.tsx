@@ -1,8 +1,114 @@
+import { Form, FormGroup, FormControl, FormLabel, FormSelect, Row, Col, InputGroup, Button } from "react-bootstrap"
+import { FaRegCalendarAlt } from "react-icons/fa"
 export default function AssignmentEditor() {
   return (
+    <div id="wd-assignments-editor" className="wd-assignments-editor">
+      <FormGroup className="mb-3 w-75" controlId="wd-assignment-name">
+        <FormLabel>Assignment Name</FormLabel>
+        <FormControl defaultValue="A1" />
+      </FormGroup>
+      <FormGroup className="mb-3 w-75" controlId="wd-textarea">
+        <FormControl as="textarea" rows={15} defaultValue="This is an example text area"/>
+      </FormGroup>
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+        <Form.Label column sm={3}>
+        Points
+        </Form.Label>
+        <Col sm={8}>
+          <Form.Control  defaultValue={100} />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+        <Form.Label column sm={3}>
+        Assignment Group
+        </Form.Label>
+        <Col sm={8}>
+          <FormSelect>
+            <option selected value="ASSIGNMENTS">ASSIGNMENTS</option>
+            <option value="QUIZZES">QUIZZES</option>
+            <option value="EXAMS">EXAMS</option>
+            <option value="PROJECT">PROJECT</option>
+          </FormSelect>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+        <Form.Label column sm={3}>
+        Display Grade as
+        </Form.Label>
+        <Col sm={8}>
+          <FormSelect>
+            <option selected value="percentage">Percentage</option>
+            <option value="number">Number</option>
+            <option value="letter">Letter</option>
+          </FormSelect>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+        <Form.Label column sm={3}>
+          Submission Type
+        </Form.Label>
+        <Col sm={8} className="border px-3 py-3">
+          <FormSelect>
+            <option selected value="online">Online</option>
+            <option value="physical">Physical</option>
+          </FormSelect>
+          <br />
+          <b>Online Entry Options</b>
+          <br />
+          <Form.Check label="Text Entry" />
+          <Form.Check checked label="Website URL" />
+          <Form.Check label="Media Recordings" />
+          <Form.Check label="Student Annotation" />
+          <Form.Check label="File Uploads" />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+        <Form.Label column sm={3}>
+          Assign
+        </Form.Label>
+        <Col sm={8} className="border px-3 py-3">
+          <b>Assign to</b><br />
+          <div className="border px-2 py-2">
+            <div className="w-25 bg-secondary">&nbsp;Everyone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</div>
+          </div><br />
+          <b>Due</b>
+          <InputGroup>
+            <FormControl defaultValue="May 13, 2024, 11:59 PM" />
+            <InputGroup.Text>
+              <FaRegCalendarAlt />
+            </InputGroup.Text>
+          </InputGroup><br />
+          <b>Available from</b>
+          <InputGroup className="w-50">
+            <FormControl defaultValue="May 6, 2024, 12:00 PM" />
+            <InputGroup.Text>
+              <FaRegCalendarAlt />
+            </InputGroup.Text>
+          </InputGroup>
+          <b>Until</b>
+          <InputGroup className="w-50">
+            <FormControl defaultValue="May 13, 2024, 11:59 PM" />
+            <InputGroup.Text>
+              <FaRegCalendarAlt />
+            </InputGroup.Text>
+          </InputGroup>
+        </Col>
+      </Form.Group>
+      <br />
+      <hr />
+      <div className="wd-editor-btns">
+        <Button variant="secondary" size="lg">
+          Cancel
+        </Button>
+        <Button variant="danger" size="lg">
+          Save
+        </Button>
+      </div>
+    </div>
+    /*
     <div id="wd-assignments-editor">
       <label htmlFor="wd-name"><b>Assignment Name</b></label><br /><br />
-      <input id="wd-name" value="A1 - ENV + HTML" /><br /><br />
+      <input id="wd-name" value="A1" /><br /><br />
       <textarea id="wd-description" rows={10} cols={50}>
         The assignment is available online Submit a link to the landing page of
       </textarea>
@@ -150,4 +256,5 @@ export default function AssignmentEditor() {
       <button>Cancel</button>
       <button>Save</button>
     </div>
+    */
 );}
