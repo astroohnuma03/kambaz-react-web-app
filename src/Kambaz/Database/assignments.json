@@ -1,0 +1,83 @@
+[
+  { 
+    "_id": "A101",
+    "title": "Propulsion Assignment",
+    "course": "RS101",
+    "available": "May 6, 2024, 12:00am",
+    "due": "May 13, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Propulsion"
+  },
+  { 
+    "_id": "A102",
+    "title": "Combustion Analysis",
+    "course": "RS101",
+    "available": "May 13, 2024, 12:00am",
+    "due": "May 20, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Combustion"
+  },
+  {
+    "_id": "A103",
+    "title": "Nozzle Design Project",
+    "course": "RS101",
+    "available": "May 20, 2024, 12:00am",
+    "due": "May 27, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Nozzle Design"
+  },
+  {
+    "_id": "A201",
+    "title": "Aerodynamics Quiz",
+    "course": "RS102",
+    "available": "May 6, 2024, 12:00am",
+    "due": "May 13, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for an Aerodynamics Quiz"
+  },
+  {
+    "_id": "A202",
+    "title": "Flow Analysis",
+    "course": "RS102",
+    "available": "May 13, 2024, 12:00am",
+    "due": "May 20, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Flow Analysis"
+  },
+  {
+    "_id": "A203",
+    "title": "Heating Analysis",
+    "course": "RS102",
+    "available": "May 20, 2024, 12:00am",
+    "due": "May 27, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Heating Analysis"
+  },
+  {
+    "_id": "A301",
+    "title": "Structural Design Task",
+    "course": "RS103",
+    "available": "May 6, 2024, 12:00am",
+    "due": "May 13, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Structural Design"
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Calculations",
+    "course": "RS103",
+    "available": "May 13, 2024, 12:00am",
+    "due": "May 20, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for Orbital Calculations"
+  },
+  {
+    "_id": "A303",
+    "title": "Systems Engineering Exam",
+    "course": "RS103",
+    "available": "May 20, 2024, 12:00am",
+    "due": "May 27, 2024, 11:59pm",
+    "pts": 100,
+    "text": "This is an example text area for a Systems Engineering Exam"
+  }
+]
