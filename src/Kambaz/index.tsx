@@ -3,8 +3,16 @@ import Account from "./Account";
 import Dashboard from "./Dashboard";
 import KambazNavigation from "./Navigation";
 import Courses from "./Courses";
+import { useState } from "react";
+import ProtectedRoute from "./Account/ProtectedRoute";
+import { useSelector } from "react-redux";
 import "./styles.css";
 export default function Kambaz() {
+  const { courses } = useSelector((state: any) => state.coursesReducer);
+  const [course, setCourse] = useState<any>({
+    _id: "1234", name: "New Course", number: "New Number",
+    startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
+  });
   return (
     <div id="wd-kambaz">
       <KambazNavigation />
@@ -12,8 +20,14 @@ export default function Kambaz() {
         <Routes>
           <Route path="/" element={<Navigate to="/Kambaz/Dashboard" />} />
           <Route path="/Account/*" element={<Account />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Courses/:cid/*" element={<Courses />} />
+          <Route path="Dashboard" element={
+            <ProtectedRoute>
+              <Dashboard
+                courses={courses}
+                course={course}
+                setCourse={setCourse}/>
+            </ProtectedRoute>} />
+          <Route path="/Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses} /></ProtectedRoute>} />
           <Route path="/Calender" element={<h1>Calender</h1>} />
           <Route path="/Inbox" element={<h1>Inbox</h1>} />
         </Routes>

@@ -2,18 +2,27 @@ import ListGroup from "react-bootstrap/ListGroup"
 import { BsGripVertical } from "react-icons/bs"
 import AssignmentsControls from "./AssignmentsControls"
 import AssignmentControlButtons from "./AssignmentControlButtons"
-import LessonControlButtons from "../Modules/LessonControlButtons"
+import AssignmentControlButtonsIndividual from "./AssignmentControlButtonsIndividual"
 import { MdOutlineAssignment } from "react-icons/md"
 import { IoMdArrowDropdown } from "react-icons/io"
 import { Link } from "react-router-dom"
+import { deleteAssignment } from "./reducer";
 import { useParams } from "react-router"
-import * as db from "../../Database";
+import { useSelector, useDispatch } from "react-redux"
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments;
+  const assignment = {
+    _id: "1234", title: "New Assignment", course: cid,
+    available: "January 1, 2024, 12:00am", due: "December 31, 2024, 11:59pm",
+    pts: 100, text: "New Text",
+  }
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const allowEdit = (currentUser.role === "FACULTY")
+  const dispatch = useDispatch();
   return (
     <div>
-      <AssignmentsControls /><br />
+      <AssignmentsControls assignment={assignment} /><br />
         <ListGroup className="rounded-0" id="wd-assignments">
           <ListGroup.Item className="wd-assignment-title p-0 mb-5 fs-5 border-gray">
             <div className="wd-title p-3 ps-2 bg-secondary">
@@ -30,11 +39,15 @@ export default function Assignments() {
                     <MdOutlineAssignment className="text-success" />
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h5><Link to={`/Kambaz/Courses/${assignment.course}/Assignments/${assignment._id}`}
+                    {allowEdit ? <h5><Link to={`/Kambaz/Courses/${assignment.course}/Assignments/${assignment._id}`}
                               id="wd-assignment-link" className="text-decoration-none text-black">
                                 {assignment.title}
                         </Link>
                     </h5>
+                    :
+                    <h5 id="wd-assignment-link" className="text-decoration-none text-black">
+                      {assignment.title}
+                    </h5>}
                     <p className="h6">
                       <span className="text-danger">Multiple Modules</span> |
                       <span className="fw-bold">Not available until</span> <span>{assignment.available}</span> |
@@ -42,7 +55,8 @@ export default function Assignments() {
                       <span>{`${assignment.pts} pts`}</span>
                     </p>
                   </div>
-                  <LessonControlButtons />
+                  <AssignmentControlButtonsIndividual assignmentId={assignment._id}
+                    deleteAssignment={(assignmentId) => {dispatch(deleteAssignment(assignmentId));}}/>
                 </ListGroup.Item>
               ))}
             </ListGroup>
