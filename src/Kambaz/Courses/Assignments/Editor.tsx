@@ -6,11 +6,12 @@ import { courses } from "../../Database";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 export default function AssignmentEditor() {
   const { aid } = useParams();
   const { cid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-  
   const [assignment, setAssignment] = useState<any>(
     aid === "1234"
       ? {
@@ -24,10 +25,19 @@ export default function AssignmentEditor() {
         }
       : assignments.find((a: any) => a._id === aid) || null
   );
-
   if (!assignment) return <p>Loading...</p>;
-
   const course = courses.find((course) => course._id === cid);
+  const createAssignmentForCourse = async () => {
+    if (!cid) return;
+    if (aid !== "1234") return;
+    const newAssignment = { ...assignment, course: cid };
+    const assignmentServ = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+    dispatch(addAssignment(assignmentServ));
+  };
+  const saveAssignment = async (assignment: any) => {
+    await assignmentsClient.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  };
   const dispatch = useDispatch();
   return (
     <div id="wd-assignments-editor" className="wd-assignments-editor">
@@ -40,7 +50,7 @@ export default function AssignmentEditor() {
         <FormControl as="textarea" rows={15} value={assignment.text}
          onChange={(e) => setAssignment({ ...assignment, text: e.target.value }) } />
       </FormGroup>
-      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75" controlId="wd-assignment-pts">
         <Form.Label column sm={3}>
         Points
         </Form.Label>
@@ -49,13 +59,13 @@ export default function AssignmentEditor() {
            onChange={(e) => setAssignment({ ...assignment, pts: e.target.value }) } />
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="wd-form-name mb-3 w-75">
+      <Form.Group as={Row} className="wd-form-name mb-3 w-75" controlId="wd-assignment-assign">
         <Form.Label column sm={3}>
           Assign
         </Form.Label>
         <Col sm={8} className="border px-3 py-3">
           <b>Due</b>
-          <InputGroup>
+          <InputGroup id="wd-assignment-due">
             <FormControl value={assignment.due}
              onChange={(e) => setAssignment({ ...assignment, due: e.target.value }) } />
             <InputGroup.Text>
@@ -63,7 +73,7 @@ export default function AssignmentEditor() {
             </InputGroup.Text>
           </InputGroup><br />
           <b>Available from</b>
-          <InputGroup className="w-50">
+          <InputGroup className="w-50" id="wd-assignment-available">
             <FormControl value={assignment.available}
              onChange={(e) => setAssignment({ ...assignment, available: e.target.value }) } />
             <InputGroup.Text>
@@ -71,8 +81,8 @@ export default function AssignmentEditor() {
             </InputGroup.Text>
           </InputGroup>
           <b>Until</b>
-          <InputGroup className="w-50">
-            <FormControl value={assignment.due} />
+          <InputGroup className="w-50" id="wd-assignment-until">
+            <FormControl defaultValue={assignment.due} />
             <InputGroup.Text>
               <FaRegCalendarAlt />
             </InputGroup.Text>
@@ -89,7 +99,7 @@ export default function AssignmentEditor() {
         </Link>
         <Link to={`/Kambaz/Courses/${course && course._id}/Assignments`} >
           <Button variant="danger" size="lg"
-          onClick={() => {aid === "1234" ? dispatch(addAssignment(assignment)) : dispatch(updateAssignment(assignment))}}>
+          onClick={() => {aid === "1234" ? createAssignmentForCourse() : saveAssignment(assignment)}}>
             Save
           </Button>
         </Link>

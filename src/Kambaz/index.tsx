@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router";
 import Account from "./Account";
 import Dashboard from "./Dashboard";
@@ -6,31 +7,59 @@ import Courses from "./Courses";
 import { useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import { useSelector } from "react-redux";
+import Session from "./Account/Session";
+import * as userClient from "./Account/client";
+import * as coursesClient from "./Courses/client";
 import "./styles.css";
 export default function Kambaz() {
-  const { courses } = useSelector((state: any) => state.coursesReducer);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const fetchAllCourses = async () => {
+    try {
+      const allCourses = await coursesClient.fetchAllCourses();
+      setAllCourses(allCourses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => { fetchAllCourses(); }, []);
+  const fetchCourses = async () => {
+    try {
+      const courses = await userClient.findMyCourses();
+      setCourses(courses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchCourses();
+  }, [currentUser]);
   const [course, setCourse] = useState<any>({
     _id: "1234", name: "New Course", number: "New Number",
     startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
   });
   return (
-    <div id="wd-kambaz">
-      <KambazNavigation />
-      <div className="wd-main-content-offset p-3">
-        <Routes>
-          <Route path="/" element={<Navigate to="/Kambaz/Dashboard" />} />
-          <Route path="/Account/*" element={<Account />} />
-          <Route path="Dashboard" element={
-            <ProtectedRoute>
-              <Dashboard
-                courses={courses}
-                course={course}
-                setCourse={setCourse}/>
-            </ProtectedRoute>} />
-          <Route path="/Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses} /></ProtectedRoute>} />
-          <Route path="/Calender" element={<h1>Calender</h1>} />
-          <Route path="/Inbox" element={<h1>Inbox</h1>} />
-        </Routes>
+    <Session>
+      <div id="wd-kambaz">
+        <KambazNavigation />
+        <div className="wd-main-content-offset p-3">
+          <Routes>
+            <Route path="/" element={<Navigate to="/Kambaz/Dashboard" />} />
+            <Route path="/Account/*" element={<Account />} />
+            <Route path="Dashboard" element={
+              <ProtectedRoute>
+                <Dashboard
+                  allCourses={allCourses}
+                  courses={courses}
+                  course={course}
+                  setCourse={setCourse}/>
+              </ProtectedRoute>} />
+            <Route path="/Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses} /></ProtectedRoute>} />
+            <Route path="/Calender" element={<h1>Calender</h1>} />
+            <Route path="/Inbox" element={<h1>Inbox</h1>} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Session>
 );}

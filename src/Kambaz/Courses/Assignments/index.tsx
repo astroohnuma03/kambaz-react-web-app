@@ -1,14 +1,17 @@
-import ListGroup from "react-bootstrap/ListGroup"
-import { BsGripVertical } from "react-icons/bs"
-import AssignmentsControls from "./AssignmentsControls"
-import AssignmentControlButtons from "./AssignmentControlButtons"
-import AssignmentControlButtonsIndividual from "./AssignmentControlButtonsIndividual"
-import { MdOutlineAssignment } from "react-icons/md"
-import { IoMdArrowDropdown } from "react-icons/io"
-import { Link } from "react-router-dom"
-import { deleteAssignment } from "./reducer";
-import { useParams } from "react-router"
-import { useSelector, useDispatch } from "react-redux"
+import { useEffect } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
+import { BsGripVertical } from "react-icons/bs";
+import AssignmentsControls from "./AssignmentsControls";
+import AssignmentControlButtons from "./AssignmentControlButtons";
+import AssignmentControlButtonsIndividual from "./AssignmentControlButtonsIndividual";
+import { MdOutlineAssignment } from "react-icons/md";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { Link } from "react-router-dom";
+import { setAssignments, deleteAssignment } from "./reducer";
+import { useParams } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 export default function Assignments() {
   const { cid } = useParams();
   const assignment = {
@@ -19,6 +22,17 @@ export default function Assignments() {
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const allowEdit = (currentUser.role === "FACULTY")
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+  const removeAssignment = async (assignmentId: string) => {
+    await assignmentsClient.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
   const dispatch = useDispatch();
   return (
     <div>
@@ -32,7 +46,7 @@ export default function Assignments() {
               <AssignmentControlButtons />
             </div>
             <ListGroup className="wd-assigns rounded-0">
-              {assignments.filter((assignment: any) => assignment.course === cid).map((assignment: any) => (
+              {assignments.map((assignment: any) => (
                 <ListGroup.Item className="wd-assignment p-3 ps-1 d-flex align-items-center justify-content-between">
                   <div className="d-flex align-items-center flex-shrink-0">
                     <BsGripVertical className="me-2 fs-3" />
@@ -56,7 +70,7 @@ export default function Assignments() {
                     </p>
                   </div>
                   <AssignmentControlButtonsIndividual assignmentId={assignment._id}
-                    deleteAssignment={(assignmentId) => {dispatch(deleteAssignment(assignmentId));}}/>
+                    deleteAssignment={(assignmentId) => {removeAssignment(assignmentId)}}/>
                 </ListGroup.Item>
               ))}
             </ListGroup>
