@@ -44,7 +44,7 @@ export default function Profile() {
                         onChange={ (e) => setProfile({ ...profile, email: e.target.value })}/>
           <FormSelect onChange={(e) => setProfile({ ...profile, role:  e.target.value })}
           className="mb-2 w-25" id="wd-user-type">
-            <option selected value="user">User</option>
+            <option value="user">User</option>
             <option value="admin">Admin</option>
             <option value="faculty">Faculty</option>
             <option value="student">Student</option>
